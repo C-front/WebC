@@ -35,13 +35,21 @@ void user_tasks_html(FILE *fp, void *data) {
               for (int i = 0; i < tasks->task_count; i++) {
                 LI("class='default'") {
                   _("Task %d: %s", i + 1, tasks->tasks[i]);
+                  BUTTON("", "Удалить");
                 }
               }
             }
           }
         }
       }
-      SCRIPT("js/main.js");
+      SCRIPT_SRC("js/main.js");
+      SCRIPT("const buttons = document.querySelectorAll('button');" \
+        "buttons.forEach((btn) => {"\
+        "btn.addEventListener('click', () => {"\
+        "btn.parentElement.outerHTML = ''"\
+          "})"\
+        "});"\
+      "");
     }
   }
 }
@@ -69,13 +77,6 @@ void user_tasks_css(FILE *fp, void *data) {
     }
 }
 
-
-void user_tasks_js(FILE *fp, void *data) {
-    
-}
-
-
-
 int main() {
   user_tasks data;
   {
@@ -90,8 +91,8 @@ int main() {
     }
   }
   printf("Generating HTML for user: %s\n",  data.user_name);
-  generate(user_tasks_html, "tasks/vanya.html", &data);
-  generate(user_tasks_css, "tasks/styles.css", &data);
+  generate(user_tasks_html, "vanya.html", &data);
+  generate(user_tasks_css, "styles.css", &data);
 
   return 0;
 }
