@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include <emscripten.h>
 
 typedef struct {
     void (*effect)();
@@ -39,7 +38,6 @@ static void free_effect(Effect* eff) {
     }
 }
 
-EMSCRIPTEN_KEEPALIVE
 void register_effect(
     void (*effect)(),
     const int* dependencies, 
@@ -58,7 +56,6 @@ void register_effect(
     eff->effect();
 }
 
-EMSCRIPTEN_KEEPALIVE
 void update_dependencies(int effect_index, const int* new_deps, int dep_count) {
     
     Effect* eff = effects[effect_index];
@@ -78,4 +75,20 @@ void update_dependencies(int effect_index, const int* new_deps, int dep_count) {
             eff->effect();
         }
     }
+}
+
+void my_effect() {
+    printf("Effect toched\n");
+}
+
+int main() {
+    printf("Effect started\n");
+
+    int deps[] = {1, 2}; 
+    register_effect(my_effect, deps, 2);
+
+    int new_deps[] = {1, 3};
+    update_dependencies(0, new_deps, 2);
+
+    return 0;
 }

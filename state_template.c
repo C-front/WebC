@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <emscripten.h>
 
 typedef struct {
     int value;
@@ -20,22 +19,34 @@ int get_state(State* state) {
     return state->value;
 }
 
-EMSCRIPTEN_KEEPALIVE
 State* init_state(int initial_value) {
     return create_state(initial_value);
 }
 
-EMSCRIPTEN_KEEPALIVE
 void update_state(State* state, int new_value) {
     set_state(state, new_value);
 }
 
-EMSCRIPTEN_KEEPALIVE
 int read_state(State* state) {
     return get_state(state);
 }
 
-EMSCRIPTEN_KEEPALIVE
 void free_state(State* state) {
     free(state);
+}
+
+int main() {
+    State* my_state = init_state(10);
+
+    printf("start: %d\n", read_state(my_state));
+
+    update_state(my_state, 20);
+    printf("update: %d\n", read_state(my_state));
+
+    update_state(my_state, 30);
+    printf("update 2: %d\n", read_state(my_state));
+
+    free_state(my_state);
+
+    return 0;
 }
