@@ -17,6 +17,7 @@
 
 #define PORT 8081
 #define BUFFER_SIZE 104857600
+#define ROOT_FILE "itworks"
 
 const char *get_file_extension(const char *file_name) {
     const char *dot = strrchr(file_name, '.');
@@ -38,7 +39,7 @@ const char *get_mime_type(const char *file_ext) {
     } else if (strcasecmp(file_ext, "css") == 0) {
     return "text/css";
 } else {
-        return "application/octet-stream";
+        return "text/plain";
     }
 }
 
@@ -107,8 +108,11 @@ void build_http_response(const char *file_name,
          "Content-Type: %s\r\n"
          "Cache-Control: no-cache\r\n"
          "\r\n", mime_type);
+    
+    if (file_name[0] == '\0' || strcmp(file_name, "/") == 0) {
+        file_name = ROOT_FILE;
+    }
 
-    // if file not exist, response is 404 Not Found
     int file_fd = open(file_name, O_RDONLY);
     if (file_fd == -1) {
         snprintf(response, BUFFER_SIZE,

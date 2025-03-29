@@ -1,0 +1,18 @@
+{
+    "configurations": [
+        {
+          "name": "Linux",
+          "includePath": [
+            "${workspaceFolder}/**",
+            "/home/dude/builds/emsdk/upstream/emscripten/system/include"
+          ],
+          "defines": [],
+          // "compilerPath": "/usr/bin/gcc",
+          "compilerPath": "/home/dude/builds/emsdk/upstream/emscripten/emcc",
+          "cStandard": "c17",
+          "cppStandard": "gnu++17",
+          "intelliSenseMode": "linux-gcc-x64"
+        }
+    ],
+    "version": 4
+}

@@ -6,24 +6,20 @@ typedef struct {
     int value;
 } State;
 
-// Функция для создания состояния
 State* create_state(int initial_value) {
     State* state = (State*)malloc(sizeof(State));
     state->value = initial_value;
     return state;
 }
 
-// Функция для обновления состояния
 void set_state(State* state, int new_value) {
     state->value = new_value;
 }
 
-// Функция для получения текущего значения состояния
 int get_state(State* state) {
     return state->value;
 }
 
-// Экспортируем функции в JavaScript
 EMSCRIPTEN_KEEPALIVE
 State* init_state(int initial_value) {
     return create_state(initial_value);

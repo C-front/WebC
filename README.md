@@ -1,13 +1,13 @@
-### High level design
-The server listens for incoming connections on a port 8080. and processes client requests in separate threads. This allows the server to handle multiple concurrent connections.
+# Проект "Web-c"
 
-Upon receiving a client request, the server checks if it is a valid GET request and extracts the requested file name. It then decodes the URL-encoded file name and determines the file's extension to identify the appropriate MIME type for the response.
+Суть проекта в создании фреймворка для статической генерации и последующего запуска проекта через собственный сервер, написанный на C.
 
-Using a case-insensitive file search, the server checks if the requested file exists in the current directory. If it does, the server constructs an HTTP response with the appropriate headers, including the determined MIME type, and sends the file's contents to the client. If the file is not found, the server sends a 404 Not Found response.
+## Как запустить?
 
-The server continues to accept and process incoming connections until it is manually terminated.
+1. `./server` – запускает сервер на `http://localhost:8081`. Сервер видит все файлы в текущей директории, для проверки работоспособности перейдите по адресу и вы должны увидеть <b>`server works!`</b>. Для изменения корневого файла изменить содержимое `itworks` или же измените `server.c`, затем скомпилируйте и запустите заново. После этого ваш сервер <b>работает</b>.
 
-### Problems encountered
-1. After re-compiling and restarting server after every change, I got error `bind failed: address already in use`. I was confused because I've already killed every process that uses port 8080. After some [research](https://stackoverflow.com/questions/15198834/bind-failed-address-already-in-use), I found out that "the server still owns the socket when it starts and terminates quickly". So I add `SO_REUSEADDR` to the socket config, which "tells the server that even if this port is busy, go ahead and reuse it anyway".
+2. `test.c` – содержит пример использование файлов `css_styles.h` и `html_tags.h`. Подключите их, затем используйте внутренние теги. Для генерации ипользуйте `generate.c`, основная функция которого принимает _<b>функцию A со сгенерировшимися тегами HTML, CSS и тд.</b>_, название нового файла и остальные аргументы, для функции <b>A</b>.
 
-2. After increasing buffer to 10MiB, I got error `bus error` every time I started the server. After some research, I found out that the stack memory allocated for each thread is usually limited. So I allocate the buffers on the heap instead of the stack by using `malloc()` and `free()`.
+3. После запуска `test.c` или любого другого вашего файла сгенерируются файлы (например `vanya.html`), после чего ваш сервер начнет отдавать их по запросу, например, `http://localhost:8081/vanya.html`.
+
+4. Для генерации HTML разметки используйте тегн из `html_tags.h`, для генерации CSS-стилей используйте теги из `css_styles.h`, для генерации JS используйте встроенный в `html_tags.h` макрос `SCRIPT`.
