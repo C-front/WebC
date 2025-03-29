@@ -90,8 +90,8 @@ int main() {
     }
   }
   printf("Generating HTML for user: %s\n",  data.user_name);
-  generate(user_tasks_html, "tasks/vanya.html", &data);
-  generate(user_tasks_css, "tasks/styles.css", &data);
+  generate(user_tasks_html, "./tasks/vanya.html", &data);
+  generate(user_tasks_css, "./tasks/styles.css", &data);
 
   return 0;
 }
